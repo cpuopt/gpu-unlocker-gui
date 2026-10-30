@@ -1,0 +1,104 @@
+<Window x:Class="GpuUnlocker.App.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:GpuUnlocker.App" xmlns:core="clr-namespace:GpuUnlocker.Core;assembly=GpuUnlocker.Core"
+        Title="{x:Static core:BuildInfo.WindowTitle}" Width="1020" Height="960" MinWidth="840" MinHeight="650" Background="#F3F5FA" Foreground="#25314B" FontFamily="Microsoft YaHei UI" FontSize="13" WindowStartupLocation="CenterScreen">
+  <Window.Resources><local:StatusBrushConverter x:Key="StatusBrush" /><local:GpuDisplayConverter x:Key="GpuDisplay" /></Window.Resources>
+  <DockPanel>
+    <Border DockPanel.Dock="Top" Background="#17223D" Padding="28,20">
+      <Grid>
+        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+        <StackPanel Margin="0,0,20,0"><TextBlock Text="{x:Static core:BuildInfo.Header}" Foreground="White" FontSize="25" FontWeight="Bold" /><TextBlock Text="{Binding [HeaderSubtitle], Source={x:Static local:Localization.Current}}" TextWrapping="Wrap" Foreground="#BBC7E1" Margin="0,5,0,0" /></StackPanel>
+        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+          <ComboBox x:Name="LanguageSelector" ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage}" DisplayMemberPath="Name" MinWidth="115" Padding="7,4" ToolTip="{Binding [Language], Source={x:Static local:Localization.Current}}" AutomationProperties.Name="{Binding [Language], Source={x:Static local:Localization.Current}}" />
+          <TextBlock Text="WINDOWS / UEFI" Foreground="#93A7D6" HorizontalAlignment="Right" FontSize="12" Margin="0,8,0,0" />
+        </StackPanel>
+      </Grid>
+    </Border>
+    <Border DockPanel.Dock="Bottom" Background="White" BorderBrush="#DFE5F1" BorderThickness="0,1,0,0" Padding="22,10">
+      <Grid><TextBlock Text="{Binding StatusText.Value}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,230,0" /><Button Content="{Binding [CancelTask], Source={x:Static local:Localization.Current}}" Command="{Binding CancelCommand}" HorizontalAlignment="Right" Style="{StaticResource SecondaryButton}" /></Grid>
+    </Border>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Margin="26,20,26,14">
+        <Border Style="{StaticResource Card}" Background="#FFF9EB" BorderBrush="#EBDCB8">
+          <StackPanel><TextBlock Text="{Binding [RiskTitle], Source={x:Static local:Localization.Current}}" Style="{StaticResource SectionTitle}" /><TextBlock Text="{Binding [RiskNotice], Source={x:Static local:Localization.Current}}" TextWrapping="Wrap" /><CheckBox Content="{Binding [RiskConsent], Source={x:Static local:Localization.Current}}" IsChecked="{Binding RiskAccepted}" IsEnabled="{Binding NotBusy}" Margin="0,13,0,0" /></StackPanel>
+        </Border>
+        <Border Style="{StaticResource Card}">
+          <StackPanel><Grid><TextBlock Text="{Binding [EnvironmentTitle], Source={x:Static local:Localization.Current}}" Style="{StaticResource SectionTitle}" /><Button Content="{Binding [Refresh], Source={x:Static local:Localization.Current}}" Command="{Binding RefreshCommand}" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Right" Margin="0,-4,0,8" /></Grid>
+            <ItemsControl ItemsSource="{Binding Checks}"><ItemsControl.ItemTemplate><DataTemplate>
+              <Border BorderBrush="#EDF0F6" BorderThickness="0,0,0,1" Padding="0,9"><Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="22" /><ColumnDefinition Width="235" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <Ellipse Width="10" Height="10" Fill="{Binding Status, Converter={StaticResource StatusBrush}}" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                <TextBlock Grid.Column="1" Text="{Binding Label.Value}" VerticalAlignment="Center" TextWrapping="Wrap" />
+                <TextBlock Grid.Column="2" Text="{Binding Detail.Value}" Foreground="#69758A" TextWrapping="Wrap" VerticalAlignment="Center" Margin="8,0" />
+                <Button Grid.Column="3" Content="{Binding [ReopenAdmin], Source={x:Static local:Localization.Current}}" Visibility="{Binding ShowElevate, Converter={StaticResource BoolVisibility}}" Command="{Binding DataContext.ReopenCommand, RelativeSource={RelativeSource AncestorType=Window}}" FontSize="12" Padding="10,7" />
+                <Button Grid.Column="3" Content="{Binding [RemovePatchCompact], Source={x:Static local:Localization.Current}}" Visibility="{Binding ShowRemove, Converter={StaticResource BoolVisibility}}" Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=Window}}" Background="#A93F4E" FontSize="12" Padding="10,7" />
+              </Grid></Border>
+            </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+          </StackPanel>
+        </Border>
+        <Border Style="{StaticResource Card}"><StackPanel>
+          <TextBlock Text="{Binding [DownloadTitle], Source={x:Static local:Localization.Current}}" Style="{StaticResource SectionTitle}" />
+          <TextBlock Text="{Binding [DownloadNotice], Source={x:Static local:Localization.Current}}" Foreground="#69758A" TextWrapping="Wrap" />
+          <WrapPanel Margin="0,13,0,10" IsEnabled="{Binding SettingsEnabled}"><RadioButton Content="{Binding [SystemProxy], Source={x:Static local:Localization.Current}}" IsChecked="{Binding UseSystemProxy}" GroupName="proxy" Margin="0,0,24,0" /><RadioButton Content="{Binding [NoProxy], Source={x:Static local:Localization.Current}}" IsChecked="{Binding UseNoProxy}" GroupName="proxy" Margin="0,0,24,0" /><RadioButton Content="{Binding [CustomProxy], Source={x:Static local:Localization.Current}}" IsChecked="{Binding UseCustomProxy}" GroupName="proxy" /></WrapPanel>
+          <TextBox Text="{Binding ProxyAddress, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CustomProxyEnabled}" Padding="9" ToolTip="{Binding [ProxyExample], Source={x:Static local:Localization.Current}}" />
+          <TextBlock Text="{Binding CacheDescription}" Foreground="#69758A" FontSize="11" TextWrapping="Wrap" Margin="0,9,0,6" />
+          <StackPanel Orientation="Horizontal"><Button Content="{Binding [Download], Source={x:Static local:Localization.Current}}" Command="{Binding DownloadCommand}" /><Button Content="{Binding [OpenCache], Source={x:Static local:Localization.Current}}" Command="{Binding OpenCacheCommand}" Style="{StaticResource SecondaryButton}" /></StackPanel>
+          <ProgressBar Height="5" Value="{Binding DownloadPercent, Mode=OneWay}" Maximum="100" Margin="4,9,4,6" /><TextBlock Text="{Binding DownloadDescription.Value}" Foreground="#69758A" TextWrapping="Wrap" FontSize="12" />
+        </StackPanel></Border>
+        <Border Style="{StaticResource Card}"><StackPanel>
+          <TextBlock Text="{Binding [BuildTitle], Source={x:Static local:Localization.Current}}" Style="{StaticResource SectionTitle}" /><TextBlock Text="{Binding GpuDescription.Value}" TextWrapping="Wrap" Foreground="#69758A" Margin="0,0,0,10" />
+          <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+            <ComboBox ItemsSource="{Binding FamilyOptions}" SelectedItem="{Binding SelectedFamily}" DisplayMemberPath="Name.Value" IsEnabled="{Binding SettingsEnabled}" Padding="9" VerticalContentAlignment="Center" />
+            <Button Grid.Column="1" Content="{Binding [Build], Source={x:Static local:Localization.Current}}" Command="{Binding BuildCommand}" Margin="12,0,0,0" />
+          </Grid><TextBlock Text="{Binding PackageDescription.Value}" TextWrapping="Wrap" Foreground="#69758A" Margin="0,10,0,0" />
+        </StackPanel></Border>
+        <Border Style="{StaticResource Card}"><StackPanel>
+          <TextBlock Text="{Binding [InstallTitle], Source={x:Static local:Localization.Current}}" Style="{StaticResource SectionTitle}" /><TextBlock Text="{Binding [InstallNotice], Source={x:Static local:Localization.Current}}" TextWrapping="Wrap" Foreground="#69758A" />
+          <Button Content="{Binding [Install], Source={x:Static local:Localization.Current}}" Command="{Binding InstallCommand}" HorizontalAlignment="Left" Margin="0,12,0,0" ToolTip="{Binding InstallTooltip}" ToolTipService.ShowOnDisabled="True" />
+        </StackPanel></Border>
+        <Border x:Name="BootPrioritySection" Style="{StaticResource Card}"><StackPanel>
+          <TextBlock Text="{Binding [PriorityTitle], Source={x:Static local:Localization.Current}}" Style="{StaticResource SectionTitle}" />
+          <TextBlock Text="{Binding [PriorityNotice], Source={x:Static local:Localization.Current}}" TextWrapping="Wrap" Foreground="#69758A" />
+          <CheckBox IsChecked="{Binding BootOrderRiskAccepted}" IsEnabled="{Binding SettingsEnabled}" Margin="0,12,0,8"><TextBlock TextWrapping="Wrap" Foreground="#995529" Text="{Binding [PriorityConsent], Source={x:Static local:Localization.Current}}" /></CheckBox>
+          <Button Content="{Binding [SetPriority], Source={x:Static local:Localization.Current}}" Command="{Binding SetFirstCommand}" HorizontalAlignment="Left" ToolTip="{Binding [PriorityTooltip], Source={x:Static local:Localization.Current}}" ToolTipService.ShowOnDisabled="True" />
+          <TextBlock Text="{Binding BootOrderMessage.Value}" TextWrapping="Wrap" Foreground="#69758A" Margin="0,10,0,0" />
+        </StackPanel></Border>
+        <Border Style="{StaticResource Card}"><StackPanel>
+          <Grid><TextBlock Text="{Binding [VerifyTitle], Source={x:Static local:Localization.Current}}" Style="{StaticResource SectionTitle}" /><Button Content="{Binding [Verify], Source={x:Static local:Localization.Current}}" Command="{Binding VerifyCommand}" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Right" Margin="0,-4,0,8" /></Grid>
+          <ItemsControl ItemsSource="{Binding VerificationChecks}"><ItemsControl.ItemTemplate><DataTemplate><StackPanel Orientation="Horizontal" Margin="0,5"><Ellipse Width="10" Height="10" Fill="{Binding Status, Converter={StaticResource StatusBrush}}" Margin="0,0,12,0" /><TextBlock Text="{Binding Label.Value}" /></StackPanel></DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+          <TextBlock Text="{Binding VerificationMessage.Value}" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,12,0,0" />
+          <Border Background="#EFF8F3" CornerRadius="6" Padding="13" Margin="0,12,0,0" Visibility="{Binding InstalledSuccessfully, Converter={StaticResource BoolVisibility}}"><TextBlock TextWrapping="Wrap" Foreground="#2E6849" Text="{Binding StartupMessage}" /></Border>
+        </StackPanel></Border>
+        <Border Style="{StaticResource Card}"><StackPanel>
+          <TextBlock Text="{Binding [RuntimeTitle], Source={x:Static local:Localization.Current}}" Style="{StaticResource SectionTitle}" />
+          <TextBlock Text="{Binding [SelectedGpu], Source={x:Static local:Localization.Current}}" Margin="0,0,0,7" />
+          <ComboBox ItemsSource="{Binding Targets}" SelectedItem="{Binding SelectedTarget}" IsEnabled="{Binding SettingsEnabled}" Padding="9">
+            <ComboBox.ItemTemplate><DataTemplate><TextBlock><TextBlock.Text><MultiBinding Converter="{StaticResource GpuDisplay}"><Binding /><Binding Path="[UnknownPci]" Source="{x:Static local:Localization.Current}" /></MultiBinding></TextBlock.Text></TextBlock></DataTemplate></ComboBox.ItemTemplate>
+          </ComboBox>
+          <TextBlock Text="{Binding TargetDescription}" TextWrapping="Wrap" Foreground="#69758A" Margin="0,8,0,12" FontSize="11" />
+          <TextBlock Text="{Binding [DiagnosticNotice], Source={x:Static local:Localization.Current}}" TextWrapping="Wrap" Foreground="#69758A" />
+          <Button Content="{Binding [DetectRuntime], Source={x:Static local:Localization.Current}}" Command="{Binding DetectRuntimeCommand}" HorizontalAlignment="Left" Margin="0,10,0,8" ToolTip="{Binding [DiagnosticTooltip], Source={x:Static local:Localization.Current}}" ToolTipService.ShowOnDisabled="True" />
+          <Grid Margin="0,0,0,17"><Grid.ColumnDefinitions><ColumnDefinition Width="22" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><Ellipse Width="10" Height="10" Fill="{Binding RuntimeCheck, Converter={StaticResource StatusBrush}}" VerticalAlignment="Top" Margin="0,5,0,0" HorizontalAlignment="Left" /><TextBlock Grid.Column="1" Text="{Binding RuntimeMessage.Value}" TextWrapping="Wrap" /></Grid>
+          <Border Background="#EDF0F6" Height="1" Margin="0,0,0,14" />
+          <TextBlock Text="{Binding [GemmTitle], Source={x:Static local:Localization.Current}}" FontWeight="SemiBold" Margin="0,0,0,7" />
+          <TextBlock Text="{Binding [GemmNotice], Source={x:Static local:Localization.Current}}" TextWrapping="Wrap" Foreground="#69758A" />
+          <StackPanel Orientation="Horizontal" Margin="0,8,0,8"><TextBlock Text="{Binding [Rounds], Source={x:Static local:Localization.Current}}" VerticalAlignment="Center" Margin="0,0,8,0" /><ComboBox ItemsSource="{Binding BenchmarkRoundOptions}" SelectedItem="{Binding BenchmarkRounds}" IsEnabled="{Binding SettingsEnabled}" Width="70" Margin="0,0,12,0" /><Button Content="{Binding [Benchmark], Source={x:Static local:Localization.Current}}" Command="{Binding BenchmarkCommand}" Margin="0,4,8,4" /><Button Content="{Binding [OpenReport], Source={x:Static local:Localization.Current}}" Command="{Binding OpenReportCommand}" Style="{StaticResource SecondaryButton}" /></StackPanel>
+          <TextBlock Text="{Binding [BaselineNotice], Source={x:Static local:Localization.Current}}" TextWrapping="Wrap" Foreground="#69758A" Margin="0,0,0,8" />
+          <DataGrid ItemsSource="{Binding ThroughputResults}" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" BorderBrush="#E1E6EF" Background="White" MinHeight="130" MaxHeight="210">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="{Binding [ModeColumn], Source={x:Static local:Localization.Current}}" Binding="{Binding Mode}" Width="70" />
+              <DataGridTextColumn Header="{Binding [CurrentColumn], Source={x:Static local:Localization.Current}}" Binding="{Binding Tflops, StringFormat={}{0:F2}, TargetNullValue=—}" Width="110" />
+              <DataGridTextColumn Header="{Binding [LockedColumn], Source={x:Static local:Localization.Current}}" Binding="{Binding LockedTflops, StringFormat={}{0:F2}, TargetNullValue=—}" Width="120" />
+              <DataGridTextColumn Header="{Binding [GainColumn], Source={x:Static local:Localization.Current}}" Binding="{Binding ImprovementPercent, StringFormat={}{0:+0.0;-0.0;0.0}%, TargetNullValue=—}" Width="90" />
+              <DataGridTextColumn Header="{Binding [StatusColumn], Source={x:Static local:Localization.Current}}" Binding="{Binding Status.Value}" Width="105" />
+              <DataGridTextColumn Header="{Binding [DetailColumn], Source={x:Static local:Localization.Current}}" Binding="{Binding Detail.Value}" Width="*" />
+            </DataGrid.Columns>
+          </DataGrid>
+          <TextBlock Text="{Binding BenchmarkMessage.Value}" TextWrapping="Wrap" Foreground="#69758A" Margin="0,10,0,0" />
+        </StackPanel></Border>
+        <Border Style="{StaticResource Card}" Background="#17223D" BorderThickness="0"><StackPanel>
+          <Grid><TextBlock Text="{Binding [Terminal], Source={x:Static local:Localization.Current}}" Foreground="White" FontWeight="SemiBold" FontSize="16" /><Button Content="{Binding [SaveLog], Source={x:Static local:Localization.Current}}" Command="{Binding SaveLogCommand}" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Right" Margin="0,-5,0,8" /></Grid>
+          <TextBox x:Name="Terminal" Text="{Binding Log, Mode=OneWay}" IsReadOnly="True" Height="245" Background="#10192D" Foreground="#C7D8F4" BorderThickness="0" Padding="12" FontFamily="Consolas, Microsoft YaHei UI" FontSize="12" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" TextChanged="Terminal_TextChanged" />
+        </StackPanel></Border>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</Window>

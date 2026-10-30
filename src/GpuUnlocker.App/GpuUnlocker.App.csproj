@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType><TargetFramework>net10.0-windows</TargetFramework><UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest><AssemblyName>GpuUnlocker</AssemblyName>
+    <Platforms>AnyCPU;x64</Platforms>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+  <ItemGroup><ProjectReference Include="..\GpuUnlocker.Core\GpuUnlocker.Core.csproj" /></ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\README.md;..\..\readme.cn.md;..\..\THIRD-PARTY-NOTICES.md;..\..\dependencies.lock.json;..\..\Version.props" Link="%(Filename)%(Extension)" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

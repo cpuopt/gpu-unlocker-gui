@@ -1,0 +1,13 @@
+**/bin/
+**/obj/
+artifacts/
+.tools/
+.vs/
+*.user
+*.log
+TestResults/
+dependencies/
+cache/
+*.bin
+*.efi
+*.zip

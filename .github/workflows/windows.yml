@@ -1,0 +1,46 @@
+name: Windows build and tests
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Check version and dependency locks
+        shell: powershell
+        run: ./tools/check-versions.ps1
+      - name: Build
+        run: dotnet build GpuUnlocker.sln -c Release
+      - name: Test without touching ESP
+        run: dotnet run --project tests/GpuUnlocker.Tests -c Release --no-build
+      - name: Publish self-contained desktop app
+        id: publish
+        shell: powershell
+        run: ./tools/publish.ps1
+      - name: Isolated single-file startup and rendering smoke test
+        shell: powershell
+        run: |
+          $env:GPUUNLOCKER_SMOKE_OUTPUT = Join-Path $pwd 'artifacts\ui-smoke.png'
+          $published = Join-Path $pwd 'artifacts\GPUUnlocker-win-x64'
+          $files = @(Get-ChildItem -LiteralPath $published -Recurse -File)
+          [xml]$props = Get-Content Version.props -Raw
+          $expectedName = 'GPU-Unlocker-GUI-v' + [string]$props.Project.PropertyGroup.VersionPrefix + '.exe'
+          if ($files.Count -ne 1 -or $files[0].Name -ne $expectedName) { throw 'Expected exactly one versioned EXE.' }
+          $isolated = Join-Path $env:TEMP ([guid]::NewGuid().ToString('N'))
+          New-Item -ItemType Directory -Path $isolated | Out-Null
+          Copy-Item -LiteralPath $files[0].FullName -Destination $isolated
+          $env:DOTNET_BUNDLE_EXTRACT_BASE_DIR = Join-Path $isolated 'extract'
+          $app = Join-Path $isolated $files[0].Name
+          $process = Start-Process -FilePath $app -ArgumentList '--smoke-test' -WindowStyle Hidden -PassThru -Wait
+          if ($process.ExitCode -ne 0) { throw 'WPF smoke test failed.' }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GPU-Unlocker-GUI-v${{ steps.publish.outputs.version }}-win-x64
+          path: artifacts/GPUUnlocker-win-x64/*.exe

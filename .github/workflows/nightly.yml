@@ -1,0 +1,115 @@
+name: Nightly build and release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nightly-release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    outputs:
+      version: ${{ steps.metadata.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Check version and dependency locks
+        shell: powershell
+        run: ./tools/check-versions.ps1
+      - name: Build
+        run: dotnet build GpuUnlocker.sln -c Release
+      - name: Test without touching ESP
+        run: dotnet run --project tests/GpuUnlocker.Tests -c Release --no-build
+      - name: Publish nightly single-file app
+        shell: powershell
+        env:
+          NIGHTLY_RUN: ${{ github.run_number }}
+        run: ./tools/publish.ps1 -VersionSuffix "nightly.$env:NIGHTLY_RUN"
+      - name: Verify package and render isolated UI
+        id: metadata
+        shell: powershell
+        env:
+          NIGHTLY_RUN: ${{ github.run_number }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          [xml]$props = Get-Content Version.props -Raw
+          $version = [string]$props.Project.PropertyGroup.VersionPrefix + '-nightly.' + $env:NIGHTLY_RUN
+          $directory = Join-Path $pwd 'artifacts\GPUUnlocker-win-x64'
+          $files = @(Get-ChildItem -LiteralPath $directory -Recurse -File)
+          if ($files.Count -ne 1 -or $files[0].Name -ne "GPU-Unlocker-GUI-v$version.exe") { throw 'Expected exactly one versioned EXE.' }
+          if ($files[0].VersionInfo.ProductVersion -ne $version) { throw 'Nightly version metadata mismatch.' }
+          $isolated = Join-Path $env:TEMP ([guid]::NewGuid().ToString('N'))
+          New-Item -ItemType Directory -Path $isolated | Out-Null
+          Copy-Item -LiteralPath $files[0].FullName -Destination $isolated
+          $env:DOTNET_BUNDLE_EXTRACT_BASE_DIR = Join-Path $isolated 'extract'
+          $env:GPUUNLOCKER_SMOKE_OUTPUT = Join-Path $isolated 'smoke.png'
+          $process = Start-Process -FilePath (Join-Path $isolated $files[0].Name) -ArgumentList '--smoke-test' -WindowStyle Hidden -PassThru -Wait
+          if ($process.ExitCode -ne 0) { throw 'Nightly UI smoke test failed.' }
+          $hash = (Get-FileHash -LiteralPath $files[0].FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          [IO.File]::WriteAllText((Join-Path $directory 'SHA256SUMS.txt'), "$hash  $($files[0].Name)`n", [Text.UTF8Encoding]::new($false))
+          Copy-Item -LiteralPath dependencies.lock.json -Destination $directory
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nightly-release-assets
+          path: |
+            artifacts/GPUUnlocker-win-x64/*.exe
+            artifacts/GPUUnlocker-win-x64/SHA256SUMS.txt
+            artifacts/GPUUnlocker-win-x64/dependencies.lock.json
+          if-no-files-found: error
+          retention-days: 7
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: nightly-release-assets
+          path: release-assets
+      - name: Publish rolling nightly prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BUILD_SHA: ${{ github.sha }}
+          BUILD_VERSION: ${{ needs.build.outputs.version }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd release-assets
+          exe_name="GPU-Unlocker-GUI-v${BUILD_VERSION}.exe"
+          test -f "$exe_name"
+          sha256sum --check SHA256SUMS.txt
+          printf 'Nightly prerelease: %s\n\nCommit: %s\nBuild: %s\n\nThis rolling release is updated by manual Nightly runs. It is not a stable release.\n\nAssets: Windows x64 single-file EXE, SHA-256 checksums, and pinned dependency manifest.\n' "$BUILD_VERSION" "$BUILD_SHA" "$RUN_URL" > ../nightly-notes.md
+          # API failures must stop publication instead of being mistaken for missing objects.
+          tag_count=$(gh api "repos/$GH_REPO/git/matching-refs/tags/nightly" --jq '[.[] | select(.ref == "refs/tags/nightly")] | length')
+          if [ "$tag_count" = 0 ]; then
+            gh api --method POST "repos/$GH_REPO/git/refs" -f ref=refs/tags/nightly -f sha="$BUILD_SHA"
+          fi
+          release_count=$(gh api --paginate "repos/$GH_REPO/releases?per_page=100" --jq '[.[] | select(.tag_name == "nightly")] | length' | awk '{sum += $1} END {print sum+0}')
+          if [ "$release_count" = 0 ]; then
+            gh release create nightly --verify-tag --prerelease --latest=false --draft --title "GPU Unlocker GUI Nightly $BUILD_VERSION" --notes-file ../nightly-notes.md
+          fi
+          gh release upload nightly "$exe_name" SHA256SUMS.txt dependencies.lock.json --clobber
+          # Remove only previous application EXEs after the replacement has uploaded successfully.
+          old_assets=$(gh release view nightly --json assets --jq '.assets[].name')
+          while IFS= read -r old_asset; do
+            if [[ "$old_asset" != "$exe_name" && ( "$old_asset" == GpuUnlocker.exe || "$old_asset" == GPU-Unlocker-GUI-v*.exe ) ]]; then
+              gh release delete-asset nightly "$old_asset" --yes
+            fi
+          done <<< "$old_assets"
+          gh api --method PATCH "repos/$GH_REPO/git/refs/tags/nightly" -f sha="$BUILD_SHA" -F force=true
+          gh release edit nightly --draft=false --prerelease --latest=false --title "GPU Unlocker GUI Nightly $BUILD_VERSION" --notes-file ../nightly-notes.md
+          gh release view nightly --json url --jq .url >> "$GITHUB_STEP_SUMMARY"

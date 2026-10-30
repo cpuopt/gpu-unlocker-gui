@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <VersionPrefix>1.3.0</VersionPrefix>
+    <Product>GPU Unlocker GUI</Product>
+    <Title>GPU Unlocker GUI</Title>
+    <AssemblyTitle>GPU Unlocker GUI</AssemblyTitle>
+    <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+    <FileVersion>$(VersionPrefix).0</FileVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <RuntimeFrameworkVersion>10.0.14</RuntimeFrameworkVersion>
+    <TargetLatestRuntimePatch>false</TargetLatestRuntimePatch>
+  </PropertyGroup>
+</Project>

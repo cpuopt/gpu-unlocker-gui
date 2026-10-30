@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "applicationVersion": "1.3.0",
+  "applicationName": "GPU Unlocker GUI",
+  "dotnetSdk": "10.0.403",
+  "dotnetRuntime": "10.0.14",
+  "deploymentSchema": 2,
+  "benchmarkProtocol": "dense-cublas-gemm-v1",
+  "downloads": [
+    {
+      "project": "nv-uefi-unlocker",
+      "version": "2.1.5",
+      "purpose": "EFI unlocker, resource generator and ssdiag",
+      "sourceFile": "src/GpuUnlocker.Core/Dependencies.cs",
+      "url": "https://github.com/physicsdolphin/nv-uefi-unlocker/releases/download/v2.1.5/nv-uefi-unlocker-v2.1.5.zip",
+      "sha256": "82da87394cd2f619cdb85c44c76f2b514e81f908941d91698427961a5eec648e"
+    },
+    {
+      "project": "NVIDIA kernel module source",
+      "version": "610.43.03",
+      "purpose": "Resource generation input, not a Windows driver installation",
+      "sourceFile": "src/GpuUnlocker.Core/Dependencies.cs",
+      "url": "https://download.nvidia.com/XFree86/NVIDIA-kernel-module-source/NVIDIA-kernel-module-source-610.43.03.tar.xz",
+      "sha256": "7e118923c7a23edc36114d63273a46e3e04e9af98695a42203e7ac2dfe9fc1dc"
+    },
+    {
+      "project": "CachyOS NVIDIA utilities",
+      "version": "610.43.03-1-x86_64_v3",
+      "purpose": "Resource generation input, not a Windows driver installation",
+      "sourceFile": "src/GpuUnlocker.Core/Dependencies.cs",
+      "url": "https://archive.cachyos.org/archive/cachyos-v3/nvidia-utils-610.43.03-1-x86_64_v3.pkg.tar.zst",
+      "sha256": "e17e7c92eeffa178b0fe1f40eb17a47095f8fc3ce4a77bf115cf5bd5a4df86e9"
+    },
+    {
+      "project": "cmp50hx-unlock / gsp_rm_boot_dbg.bin",
+      "version": null,
+      "purpose": "Turing boot resource; content pinned by SHA-256 because no release version is declared",
+      "sourceFile": "src/GpuUnlocker.Core/Dependencies.cs",
+      "url": "https://raw.githubusercontent.com/xrip/cmp50hx-unlock/master/efi-unlock/blobs/gsp_rm_boot_dbg.bin",
+      "sha256": "fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471"
+    },
+    {
+      "project": "NVIDIA cuBLAS",
+      "version": "12.8.4.1",
+      "purpose": "GEMM benchmark runtime; downloaded on demand",
+      "sourceFile": "src/GpuUnlocker.Core/GemmRuntime.cs",
+      "url": "https://developer.download.nvidia.com/compute/cuda/redist/libcublas/windows-x86_64/libcublas-windows-x86_64-12.8.4.1-archive.zip",
+      "sha256": "57a470112cec7e112c95253dde8b3c7184d795dbd92b0bde77a4cb7f8c94c8aa"
+    }
+  ],
+  "cublasDlls": {
+    "cublas64_12.dll": "9513540E4EC4C51EE9E7304138C2CC255C29A8C181F9E80C38EFA25738BECD99",
+    "cublasLt64_12.dll": "B199D1FF892A81B7FD3D57BA1781549609B41500B36008FEF326038393AD46C7"
+  },
+  "referenceOnly": {
+    "pytorch": {
+      "version": "2.9.0",
+      "url": "https://github.com/pytorch/pytorch/blob/v2.9.0/aten/src/ATen/cuda/CUDABlas.cpp"
+    },
+    "historicalMmaAssembler": "NVIDIA ptxas 12.8.93",
+    "historicalKernelHashes": "src/GpuUnlocker.Core/Kernels/kernel-lock.json"
+  },
+  "environment": {
+    "windows": "x64, GPT/UEFI",
+    "powershell": "Windows PowerShell 5.1, supplied by Windows",
+    "nvidiaDriver": "Not pinned; installed by user, exact version recorded in benchmark reports and baseline matching"
+  }
+}

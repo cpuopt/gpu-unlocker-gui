@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+<resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+<resheader name="version"><value>2.0</value></resheader>
+  <data name="HeaderSubtitle" xml:space="preserve"><value>System ESP installation and maintenance · nv-uefi-unlocker v2.1.5</value></data>
+  <data name="CancelTask" xml:space="preserve"><value>Cancel task</value></data>
+  <data name="RiskTitle" xml:space="preserve"><value>00  Risk notice</value></data>
+  <data name="RiskNotice" xml:space="preserve"><value>Before proceeding, make sure you know how to use Windows PE and edit or repair EFI boot configurations.</value></data>
+  <data name="RiskConsent" xml:space="preserve"><value>I understand the risks and know how to recover the system.</value></data>
+  <data name="EnvironmentTitle" xml:space="preserve"><value>0  Environment checks</value></data>
+  <data name="Refresh" xml:space="preserve"><value>Refresh</value></data>
+  <data name="ReopenAdmin" xml:space="preserve"><value>Restart as administrator</value></data>
+  <data name="RemovePatchCompact" xml:space="preserve"><value>Remove unlock patch</value></data>
+  <data name="DownloadTitle" xml:space="preserve"><value>1  Download dependencies</value></data>
+  <data name="DownloadNotice" xml:space="preserve"><value>Pinned to v2.1.5 · SHA-256 verified after download · Proxy applies to all downloads</value></data>
+  <data name="SystemProxy" xml:space="preserve"><value>System proxy</value></data>
+  <data name="NoProxy" xml:space="preserve"><value>No proxy</value></data>
+  <data name="CustomProxy" xml:space="preserve"><value>Custom proxy</value></data>
+  <data name="ProxyExample" xml:space="preserve"><value>For example, http://127.0.0.1:7890 or socks5://127.0.0.1:7890</value></data>
+  <data name="Download" xml:space="preserve"><value>Download dependencies</value></data>
+  <data name="OpenCache" xml:space="preserve"><value>Open cache folder</value></data>
+  <data name="BuildTitle" xml:space="preserve"><value>2  Generate patch</value></data>
+  <data name="Build" xml:space="preserve"><value>Generate patch</value></data>
+  <data name="InstallTitle" xml:space="preserve"><value>3  Install to ESP</value></data>
+  <data name="InstallNotice" xml:space="preserve"><value>Add a GPU Unlock boot entry and keep Windows Boot Manager. Boot priority is preserved.</value></data>
+  <data name="Install" xml:space="preserve"><value>Install to ESP</value></data>
+  <data name="PriorityTitle" xml:space="preserve"><value>4  Set boot priority</value></data>
+  <data name="PriorityNotice" xml:space="preserve"><value>Move GPU Unlock to the top of the UEFI boot order, keeping Windows Boot Manager as a fallback and preserving other entries. The current order is backed up first; restart to verify actual boot behavior.</value></data>
+  <data name="PriorityConsent" xml:space="preserve"><value>I understand that this changes the firmware boot order to run GPU Unlock first. If boot fails, I will select Windows Boot Manager in the BIOS boot menu to recover.</value></data>
+  <data name="SetPriority" xml:space="preserve"><value>Set GPU Unlock as first boot entry</value></data>
+  <data name="PriorityTooltip" xml:space="preserve"><value>Install to ESP or verify an existing installation, then accept this step's risk notice. No change is needed if GPU Unlock is already first and the fallback order is valid.</value></data>
+  <data name="VerifyTitle" xml:space="preserve"><value>5  Verify installation and boot order</value></data>
+  <data name="Verify" xml:space="preserve"><value>Verify patch and configuration</value></data>
+  <data name="RuntimeTitle" xml:space="preserve"><value>6  Runtime status and benchmark</value></data>
+  <data name="SelectedGpu" xml:space="preserve"><value>Selected GPU</value></data>
+  <data name="DiagnosticNotice" xml:space="preserve"><value>ssdiag requires administrator privileges and downloaded dependencies. It temporarily loads a kernel driver and may wake the GPU. It runs only when requested, without --reapply, and checks driver cleanup afterward.</value></data>
+  <data name="DetectRuntime" xml:space="preserve"><value>Detect current unlock status</value></data>
+  <data name="DiagnosticTooltip" xml:space="preserve"><value>Download dependencies and run as administrator first.</value></data>
+  <data name="GemmTitle" xml:space="preserve"><value>Matrix multiplication throughput · 8192 × 8192 GEMM</value></data>
+  <data name="GemmNotice" xml:space="preserve"><value>Uses cuBLAS directly, without Python or CUDA Toolkit. The first run downloads about 538 MiB of NVIDIA libraries using the current proxy. FP32 / TF32 / FP16 / BF16 are tested separately, with 2 seconds of warmup and about 1 second per round; the median is reported. FP16/BF16 use same-precision output and FP32 accumulation, with reduced-precision reduction disabled. Results do not determine unlock status. 20-series GPUs test FP32/FP16 only.</value></data>
+  <data name="Rounds" xml:space="preserve"><value>Sample rounds</value></data>
+  <data name="Benchmark" xml:space="preserve"><value>Start GEMM test</value></data>
+  <data name="OpenReport" xml:space="preserve"><value>Locate JSON report</value></data>
+  <data name="BaselineNotice" xml:space="preserve"><value>Detect unlock status before benchmarking. A locked run saves the baseline; after restarting and confirming the GPU is unlocked, test with the same round count to see the baseline and gain. Different GPUs, drivers, or test configurations are not compared.</value></data>
+  <data name="ModeColumn" xml:space="preserve"><value>Mode</value></data>
+  <data name="CurrentColumn" xml:space="preserve"><value>Current TFLOPS</value></data>
+  <data name="LockedColumn" xml:space="preserve"><value>Locked TFLOPS</value></data>
+  <data name="GainColumn" xml:space="preserve"><value>Gain</value></data>
+  <data name="StatusColumn" xml:space="preserve"><value>Status</value></data>
+  <data name="DetailColumn" xml:space="preserve"><value>Details</value></data>
+  <data name="Terminal" xml:space="preserve"><value>Execution log</value></data>
+  <data name="SaveLog" xml:space="preserve"><value>Save log</value></data>
+  <data name="RuntimeNotChecked" xml:space="preserve"><value>Current unlock status has not been checked.</value></data>
+  <data name="BenchmarkNotRun" xml:space="preserve"><value>No benchmark yet; 8192³ dense GEMM, median of 7 rounds by default.</value></data>
+  <data name="ReadyLog" xml:space="preserve"><value>{0} is ready. Please read the risk notice first.
+</value></data>
+  <data name="ReadRisk" xml:space="preserve"><value>Please read and acknowledge the risk notice first.</value></data>
+  <data name="DetectingGpu" xml:space="preserve"><value>Detecting local GPUs…</value></data>
+  <data name="DependenciesNotDownloaded" xml:space="preserve"><value>Dependencies have not been downloaded.</value></data>
+  <data name="PatchNotBuilt" xml:space="preserve"><value>No patch has been generated.</value></data>
+  <data name="InstallationNotChecked" xml:space="preserve"><value>Installed patch has not been verified.</value></data>
+  <data name="AdminCheck" xml:space="preserve"><value>Administrator privileges</value></data>
+  <data name="AdminRunning" xml:space="preserve"><value>Running as administrator</value></data>
+  <data name="AdminRequired" xml:space="preserve"><value>Please restart as administrator</value></data>
+  <data name="GptCheck" xml:space="preserve"><value>GPT system disk</value></data>
+  <data name="EspCheck" xml:space="preserve"><value>Unique system ESP</value></data>
+  <data name="EspAccessCheck" xml:space="preserve"><value>ESP read/write access</value></data>
+  <data name="EspCleanCheck" xml:space="preserve"><value>No unlock files or remnants in ESP</value></data>
+  <data name="SecureBootCheck" xml:space="preserve"><value>Secure Boot disabled</value></data>
+  <data name="CheckAfterConsent" xml:space="preserve"><value>Checked after risk acknowledgment</value></data>
+  <data name="SelectedRuntimeNotChecked" xml:space="preserve"><value>The selected GPU's current status has not been checked.</value></data>
+  <data name="SelectedBenchmarkNotRun" xml:space="preserve"><value>No benchmark yet; uses FP32 accumulation. Results do not determine unlock status.</value></data>
+  <data name="CudaIdentity" xml:space="preserve"><value>UUID: {0} · sm_{1}{2}</value></data>
+  <data name="CudaNotMapped" xml:space="preserve"><value>CUDA UUID could not be mapped, so benchmarking is unavailable. Status detection still uses the PnP instance.</value></data>
+  <data name="Family40" xml:space="preserve"><value>ad102 (40 series)</value></data>
+  <data name="Family30" xml:space="preserve"><value>ga102 (30 series)</value></data>
+  <data name="Family20" xml:space="preserve"><value>tu10x (20 series)</value></data>
+  <data name="FamilySelected" xml:space="preserve"><value>GPU family selected. Generate the corresponding patch.</value></data>
+  <data name="StartupMessage" xml:space="preserve"><value>Installation files and boot entries are valid. {0} After restarting, detect the actual unlock status. If the firmware does not retain the setting, adjust it in BIOS or select Windows Boot Manager.</value></data>
+  <data name="CachePath" xml:space="preserve"><value>Cache: {0}</value></data>
+  <data name="ExistingPatchTooltip" xml:space="preserve"><value>Unlock files already exist in the ESP. Remove them before reinstalling.</value></data>
+  <data name="InstallTooltip" xml:space="preserve"><value>Pass all environment checks and generate a complete patch for the selected family first.</value></data>
+  <data name="DetectGpuTask" xml:space="preserve"><value>Detect GPUs</value></data>
+  <data name="UnknownFamily" xml:space="preserve"><value>Unknown family</value></data>
+  <data name="NoGpu" xml:space="preserve"><value>No GPU detected. Check Device Manager.</value></data>
+  <data name="CudaEnumerationFailed" xml:space="preserve"><value>CUDA enumeration unavailable: </value></data>
+  <data name="GpuEnumerationComplete" xml:space="preserve"><value>Startup GPU enumeration complete; automatic selection runs only once.</value></data>
+  <data name="TaskRunning" xml:space="preserve"><value>{0}…</value></data>
+  <data name="TaskComplete" xml:space="preserve"><value>{0} completed</value></data>
+  <data name="TaskFailed" xml:space="preserve"><value>{0} failed</value></data>
+  <data name="TaskCancelled" xml:space="preserve"><value>Task cancelled. You can try again.</value></data>
+  <data name="ExistingEspFiles" xml:space="preserve"><value>Existing ESP files: </value></data>
+  <data name="EnvironmentTask" xml:space="preserve"><value>Environment checks</value></data>
+  <data name="DownloadTask" xml:space="preserve"><value>Download and verify dependencies</value></data>
+  <data name="DependenciesVerified" xml:space="preserve"><value>v2.1.5 ZIP and executables verified.</value></data>
+  <data name="Generating" xml:space="preserve"><value>Generating…</value></data>
+  <data name="PackageSummary" xml:space="preserve"><value>{0} · {1} deployment files · {2:F1} MiB</value></data>
+  <data name="InstallTask" xml:space="preserve"><value>Install to ESP</value></data>
+  <data name="RemoveTask" xml:space="preserve"><value>Remove unlock patch</value></data>
+  <data name="PatchRemoved" xml:space="preserve"><value>Patch removed.</value></data>
+  <data name="SetPriorityTask" xml:space="preserve"><value>Set GPU Unlock boot priority</value></data>
+  <data name="SetPriorityFailed" xml:space="preserve"><value>Setting incomplete. Verify the installation and boot order again.</value></data>
+  <data name="BootConfigurationUnknown" xml:space="preserve"><value>Boot configuration could not be confirmed: </value></data>
+  <data name="DiagnosticRunning" xml:space="preserve"><value>ssdiag is checking the GPU; driver cleanup is checked afterward…</value></data>
+  <data name="UnknownResult" xml:space="preserve"><value>Unable to determine: </value></data>
+  <data name="GemmTask" xml:space="preserve"><value>GEMM throughput test</value></data>
+  <data name="PreparingBlas" xml:space="preserve"><value>Preparing cuBLAS; the first download is about 538 MiB, uses the current proxy, and can be cancelled.</value></data>
+  <data name="BlasProgress" xml:space="preserve"><value>cuBLAS: {0:F1} MiB / {1:F1} MiB</value></data>
+  <data name="BlasProgressUnknown" xml:space="preserve"><value>cuBLAS: {0:F1} MiB / Unknown</value></data>
+  <data name="UnknownPci" xml:space="preserve"><value>Unknown PCI address</value></data>
+  <data name="Unknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="BlasCancelled" xml:space="preserve"><value>cuBLAS preparation cancelled; benchmarking did not start.</value></data>
+  <data name="BlasFailed" xml:space="preserve"><value>cuBLAS preparation failed: {0}</value></data>
+  <data name="BenchmarkRunning" xml:space="preserve"><value>Benchmarking with {0} rounds per mode. Avoid other GPU workloads.</value></data>
+  <data name="WorkerPathUnknown" xml:space="preserve"><value>Unable to determine the benchmark process path.</value></data>
+  <data name="BenchmarkCancelled" xml:space="preserve"><value>Benchmark cancelled; these results were discarded.</value></data>
+  <data name="BenchmarkFailed" xml:space="preserve"><value>Benchmark failed: {0}</value></data>
+  <data name="PciMismatch" xml:space="preserve"><value>The benchmark returned a PCI address that does not match the selected device.</value></data>
+  <data name="BaselineIoFailed" xml:space="preserve"><value>Benchmark valid, but the baseline could not be saved or read: {0}</value></data>
+  <data name="BaselineAccessFailed" xml:space="preserve"><value>Benchmark valid, but baseline access was denied: {0}</value></data>
+  <data name="BusyGpu" xml:space="preserve"><value> GPU utilization was {0}% before testing. Other workloads make this run unsuitable for before/after comparison.</value></data>
+  <data name="BenchmarkSummary" xml:space="preserve"><value>{0} · 8192³ GEMM · Median of {1} rounds per mode · FP32 accumulation; sampled reference dot products verified.{2}{3} Report: {4}</value></data>
+  <data name="FilesCheck" xml:space="preserve"><value>Installation files, ESP identity, and SHA-256</value></data>
+  <data name="ControlsCheck" xml:space="preserve"><value>Autorun and Windows chain-loading configuration</value></data>
+  <data name="BootEntryCheck" xml:space="preserve"><value>GPU Unlock and Windows fallback boot entries</value></data>
+  <data name="BootFirstCheck" xml:space="preserve"><value>GPU Unlock is the first boot entry</value></data>
+  <data name="FallbackCheck" xml:space="preserve"><value>Windows fallback entry is in the boot order</value></data>
+  <data name="ExecutablePathUnknown" xml:space="preserve"><value>Unable to determine the application path.</value></data>
+  <data name="ElevationCancelled" xml:space="preserve"><value>Administrator request cancelled. The current window remains open.</value></data>
+  <data name="ReopenFailed" xml:space="preserve"><value>Restart failed: </value></data>
+  <data name="LogFilter" xml:space="preserve"><value>Log files|*.txt</value></data>
+  <data name="SaveLogFailed" xml:space="preserve"><value>Could not save log: </value></data>
+  <data name="TransactionClosing" xml:space="preserve"><value>A protected operation is running. Wait for the operation and cleanup to finish before closing.</value></data>
+  <data name="TaskClosing" xml:space="preserve"><value>Cancel the current task and wait for its process to exit before closing.</value></data>
+  <data name="AlreadyRunning" xml:space="preserve"><value> is already running.</value></data>
+  <data name="ScriptsMissing" xml:space="preserve"><value>Bundled scripts were not extracted.</value></data>
+  <data name="BootUnchecked" xml:space="preserve"><value>Boot order has not been checked.</value></data>
+  <data name="BootUnknown" xml:space="preserve"><value>Unable to read the firmware boot order. See the execution log.</value></data>
+  <data name="BootFirst" xml:space="preserve"><value>GPU Unlock is currently the first boot entry.</value></data>
+  <data name="BootNotFirst" xml:space="preserve"><value>GPU Unlock is not the first boot entry. Set it in step 4.</value></data>
+  <data name="BootNotListed" xml:space="preserve"><value>GPU Unlock is not in the current boot order.</value></data>
+  <data name="BootMissingFallback" xml:space="preserve"><value> Windows Boot Manager is missing from the boot order. Setting boot priority will add the fallback entry.</value></data>
+  <data name="BootSequence" xml:space="preserve"><value> A one-time boot sequence was detected and may take precedence on the next boot.</value></data>
+  <data name="InstallationValid" xml:space="preserve"><value>Installation files and boot entries are valid; {0}</value></data>
+  <data name="GptConfirmed" xml:space="preserve"><value>Current Windows system disk confirmed</value></data>
+  <data name="EspConfirmed" xml:space="preserve"><value>Current system ESP confirmed</value></data>
+  <data name="EspNotFound" xml:space="preserve"><value>No unique active system ESP found</value></data>
+  <data name="EspProbePassed" xml:space="preserve"><value>Read/write probe passed; temporary file removed</value></data>
+  <data name="ProbeNeedsAdmin" xml:space="preserve"><value>Administrator privileges required to check</value></data>
+  <data name="NotConfirmed" xml:space="preserve"><value>Not yet confirmed</value></data>
+  <data name="NoUnlockFiles" xml:space="preserve"><value>No known unlock files or boot entries found</value></data>
+  <data name="Disabled" xml:space="preserve"><value>Disabled</value></data>
+  <data name="DisableSecureBoot" xml:space="preserve"><value>Disable Secure Boot in BIOS</value></data>
+  <data name="SecureBootUnknown" xml:space="preserve"><value>Cannot confirm; requires administrator privileges and UEFI</value></data>
+  <data name="Language" xml:space="preserve"><value>Interface language</value></data>
+  <data name="LanguageSaveFailed" xml:space="preserve"><value>Could not save the language preference: {0}</value></data>
+  <data name="DownloadProgress" xml:space="preserve"><value>{0}: {1:N0} / {2:N0} bytes ({3:F1}%)</value></data>
+  <data name="DownloadProgressUnknown" xml:space="preserve"><value>{0}: {1:N0} bytes</value></data>
+  <data name="RuntimeUnlocked" xml:space="preserve"><value>Current register overrides are active: unlocked.</value></data>
+  <data name="RuntimeLocked" xml:space="preserve"><value>ssdiag verdict: locked.</value></data>
+  <data name="RuntimeUnknown" xml:space="preserve"><value>Unable to determine the current unlock status. See the execution log.</value></data>
+  <data name="CleanupIncomplete" xml:space="preserve"><value> Driver cleanup is incomplete. See the execution log.</value></data>
+  <data name="ResultPassed" xml:space="preserve"><value>Passed</value></data>
+  <data name="ResultUnsupported" xml:space="preserve"><value>Unsupported</value></data>
+  <data name="ResultFailed" xml:space="preserve"><value>Failed</value></data>
+  <data name="ResultUnstable" xml:space="preserve"><value>Unstable</value></data>
+  <data name="UnsupportedPrecision" xml:space="preserve"><value>This architecture does not support this hardware precision mode.</value></data>
+  <data name="GemmResultDetail" xml:space="preserve"><value>8192³ dense GEMM; FP32 accumulation; {0} output; reduced-precision reduction disabled; median of {1} rounds.</value></data>
+  <data name="HistoryUnknownState" xml:space="preserve"><value>No valid unlock status for the selected GPU. Only a regular benchmark report is saved; no baseline is created or compared.</value></data>
+  <data name="HistoryBusy" xml:space="preserve"><value>Other GPU workloads were detected before testing. The locked baseline is not updated and no gain is calculated.</value></data>
+  <data name="HistoryUnknownDriver" xml:space="preserve"><value>Unable to read the NVIDIA driver version. No baseline is created or compared, to avoid mixing driver versions.</value></data>
+  <data name="HistoryBaselineSaved" xml:space="preserve"><value>Locked baseline saved for this GPU and configuration. Restart, confirm the GPU is unlocked, and test with the same round count to display the gain.</value></data>
+  <data name="HistoryBaselineMissing" xml:space="preserve"><value>No locked baseline matches this GPU, driver, and configuration. Detect the locked state and complete a benchmark first.</value></data>
+  <data name="HistoryBaselineInvalid" xml:space="preserve"><value>The locked baseline is corrupt or does not match. No gain is calculated. See the execution log.</value></data>
+  <data name="HistoryCompared" xml:space="preserve"><value>Compared with the locked baseline ({0:yyyy-MM-dd HH:mm:ss}); gain = (current / locked − 1) × 100%. Negative values indicate a slowdown.</value></data>
+</root>

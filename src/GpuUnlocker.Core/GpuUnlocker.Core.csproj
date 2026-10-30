@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFramework>net10.0-windows</TargetFramework></PropertyGroup>
+  <ItemGroup><None Include="Scripts\*.ps1" CopyToOutputDirectory="PreserveNewest" Link="Scripts\%(Filename)%(Extension)" /></ItemGroup>
+  <ItemGroup><EmbeddedResource Include="Kernels\*.cubin" /><EmbeddedResource Include="Kernels\kernel-lock.json" /></ItemGroup>
+</Project>
