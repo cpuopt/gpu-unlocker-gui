@@ -4,7 +4,7 @@ GPU Unlocker GUI downloads the following independent upstream release only after
 
 - Project: physicsdolphin/nv-uefi-unlocker
 - Release: https://github.com/physicsdolphin/nv-uefi-unlocker/releases/tag/v2.1.5
-- Archive SHA-256: `82da87394cd2f619cdb85c44c76f2b514e81f908941d91698427961a5eec648e`
+- Archive SHA-256: `652081672f1c367e48ce929342102d09d802272920008275ee558f027698807f`
 - The release includes a GNU GPL version 2 license document. Its original `LICENSE` and `README.md` are retained in the extracted dependency directory. Consult the upstream project's licensing terms for use and redistribution.
 
 The desktop package does not bundle that release, NVIDIA firmware, or the SSDIAG kernel driver/tool. The SSDIAG executable in the downloaded, verified archive runs only when the user explicitly requests current unlock-state detection. No `--reapply` operation is exposed. See README for its temporary kernel-driver lifecycle and the upstream v2.1.5 cleanup limitations.

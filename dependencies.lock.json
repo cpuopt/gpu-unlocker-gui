@@ -13,7 +13,7 @@
       "purpose": "EFI unlocker, resource generator and ssdiag",
       "sourceFile": "src/GpuUnlocker.Core/Dependencies.cs",
       "url": "https://github.com/physicsdolphin/nv-uefi-unlocker/releases/download/v2.1.5/nv-uefi-unlocker-v2.1.5.zip",
-      "sha256": "82da87394cd2f619cdb85c44c76f2b514e81f908941d91698427961a5eec648e"
+      "sha256": "652081672f1c367e48ce929342102d09d802272920008275ee558f027698807f"
     },
     {
       "project": "NVIDIA kernel module source",

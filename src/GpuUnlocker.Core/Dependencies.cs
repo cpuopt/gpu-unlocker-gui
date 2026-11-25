@@ -32,7 +32,7 @@ public static class ReleaseCatalog
 {
     public static readonly DownloadAsset Release = new("nv-uefi-unlocker-v2.1.5.zip",
         "https://github.com/physicsdolphin/nv-uefi-unlocker/releases/download/v2.1.5/nv-uefi-unlocker-v2.1.5.zip",
-        "82da87394cd2f619cdb85c44c76f2b514e81f908941d91698427961a5eec648e");
+        "652081672f1c367e48ce929342102d09d802272920008275ee558f027698807f");
     public static readonly DownloadAsset[] Inputs = [
         new("NVIDIA-kernel-module-source-610.43.03.tar.xz", "https://download.nvidia.com/XFree86/NVIDIA-kernel-module-source/NVIDIA-kernel-module-source-610.43.03.tar.xz", "7e118923c7a23edc36114d63273a46e3e04e9af98695a42203e7ac2dfE9fc1dc"),
         new("nvidia-utils-610.43.03-1-x86_64_v3.pkg.tar.zst", "https://archive.cachyos.org/archive/cachyos-v3/nvidia-utils-610.43.03-1-x86_64_v3.pkg.tar.zst", "e17e7c92eeffa178b0fe1f40eb17a47095f8fc3ce4a77bf115cf5bd5a4df86e9")
